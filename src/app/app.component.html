@@ -1,12 +1,15 @@
-<section class="container">
+<section class="container" [ngClass]="formStatus">
   <header>Registration Form</header>
 
   <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="column">
       <div class="input-box">
         <input type="text" placeholder="First Name" formControlName="firstname"/>
-        <small *ngIf="registerForm.controls['firstname'].invalid && registerForm.controls['firstname'].touched ">
+        <small *ngIf="registerForm.controls['firstname'].errors?.hasOwnProperty('required') && registerForm.controls['firstname'].touched ">
           *First name is a Required Fields.
+        </small>
+        <small *ngIf="registerForm.controls['firstname'].errors?.['noSpaceAllowed'] && registerForm.controls['firstname'].touched ">
+          * no space allowed for First name.
         </small>
       </div>
       <div class="input-box">
@@ -27,7 +30,10 @@
     <div class="column">
       <div class="input-box">
         <input type="text" placeholder="username" formControlName="username"/>
-        <button class="btn-gen-username" type="button">
+        <button class="btn-gen-username" type="button" (click)="onUsernameButtonClick()"
+                [disabled]="registerForm.controls['firstname'].invalid || 
+                            registerForm.controls['lastname'].invalid || 
+                            registerForm.controls['firstname'].invalid">
           Create a Username
         </button>
       </div>
@@ -115,32 +121,32 @@
     </div>
     <button type="button" class="btn-add-delete" (click)="onButtonAddExperienceClicked()">Add Experience</button>
 
-    <input type="submit" value="Submit" class="submit-btn">
+    <input type="submit" value="Submit" class="submit-btn" (click)="onSubmitForm()">
     <!-- [disabled]="!reactiveForm.valid" -->
   </form>
 </section>
 
 <!--uncomment below HTML for displaying form data-->
 
-<!-- <section class="user-detail-container">
+<section class="user-detail-container">
   <div class="user-details-container">
     <div class="user-avatar">
-      <p>JS</p>
+      <p>{{firstname?.slice(0,1).toUpperCase()}}{{lastname?.slice(0,1).toUpperCase()}}</p>
     </div>
     <div class="user-details">
       <div class="user-name">
-        <h2>John Smith</h2>
+        <h2>{{firstname}}{{lastname}}</h2>
       </div>
-      <p><b>Email:</b> johnsmith@gmail.com</p>
-      <p><b>Username:</b> johnsmith86 </p>
-      <p><b>Date of birth:</b> July 21, 1989</p>
+      <p><b>Email:</b> {{email}}</p>
+      <p><b>Username:</b> {{username}} </p>
+      <p><b>Date of birth:</b> {{dob}}</p>
       <div class="user-name">
         <h3>Address</h3>
       </div>
-      <span>India</span>.
-      <span> New Delhi</span>.
-      <span> NCR</span>.
-      <span> 234565</span>
+      <span>{{country}}</span>.
+      <span> {{city}}</span>.
+      <span> {{region}}</span>.
+      <span> {{postal}}</span>
     </div>
   </div>
-</section> -->
+</section>
